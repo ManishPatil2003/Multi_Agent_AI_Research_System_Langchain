@@ -1,6 +1,6 @@
-# ResearchMind (Multi-Agent Research Pipeline)
+# AI Research Loop (Multi-Agent Research Pipeline)
 
-ResearchMind is a small multi-agent application that produces a structured research report for any topic. It combines:
+AI Research Loop is a small multi-agent application that produces a structured research report for any topic. It combines:
 
 - **Search Agent** (web search)
 - **Reader Agent** (scrapes and extracts key text from a selected URL)
