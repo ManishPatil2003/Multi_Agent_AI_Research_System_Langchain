@@ -1,0 +1,92 @@
+# Core AI & LLM Frameworks
+openai>=1.35.0
+langchain>=0.2.11
+langchain-openai>=0.1.17
+langchain-community>=0.2.10
+langgraph>=0.1.12
+crewai>=0.41.1
+autogen-agentchat>=0.2.34
+
+# Vector DB / Embeddings
+faiss-cpu>=1.8.0
+chromadb>=0.5.3
+tiktoken>=0.7.0
+
+# BeautifulSoup & Web Scraping
+beautifulsoup4>=4.12.3
+bs4>=0.0.2
+requests>=2.32.3
+httpx>=0.27.0
+lxml>=5.2.2
+html5lib>=1.1
+selenium>=4.22.0
+playwright>=1.45.0
+
+# Async & Performance
+aiohttp>=3.9.5
+asyncio>=3.4.3
+uvloop>=0.19.0
+
+# Data Handling
+pandas>=2.2.2
+numpy>=1.26.4
+python-dotenv>=1.0.1
+pydantic>=2.8.2
+
+# API & Backend
+fastapi>=0.111.1
+uvicorn>=0.30.1
+starlette>=0.37.2
+
+# Database
+sqlalchemy>=2.0.31
+psycopg2-binary>=2.9.9
+redis>=5.0.7
+
+# Logging & Monitoring
+loguru>=0.7.2
+rich>=13.7.1
+
+# File Handling
+PyPDF2>=3.0.1
+python-docx>=1.1.2
+openpyxl>=3.1.5
+
+# Search & Retrieval
+duckduckgo-search>=6.2.1
+google-search-results>=2.4.2
+
+# Agent Memory & Tools
+tenacity>=8.5.0
+cachetools>=5.4.0
+
+# Security
+cryptography>=43.0.0
+
+# Environment Management
+python-multipart>=0.0.9
+
+# Testing
+pytest>=8.2.2
+pytest-asyncio>=0.23.8
+
+# Optional ML Utilities
+scikit-learn>=1.5.1
+scipy>=1.14.0
+
+# CLI Utilities
+typer>=0.12.3
+
+# JSON & Parsing
+orjson>=3.10.6
+
+# Tokenizers
+transformers>=4.43.3
+
+# Multi-Agent Communication
+websockets>=12.0
+
+# Dev Tools
+black>=24.4.2
+isort>=5.13.2
+flake8>=7.1.0
