@@ -4,7 +4,7 @@ from agents import build_reader_agent, build_search_agent, writer_chain, critic_
 
 # ── Page config ──────────────────────────────────────────────────────────────
 st.set_page_config(
-    page_title="ResearchMind · AI Research Agent",
+    page_title="The AI Research Loop · AI Research Agent",
     page_icon="🔬",
     layout="wide",
     initial_sidebar_state="collapsed",
@@ -13,278 +13,368 @@ st.set_page_config(
 # ── Custom CSS ────────────────────────────────────────────────────────────────
 st.markdown("""
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 
-/* ── Reset & base ── */
+/* =========================
+   GLOBAL
+========================= */
+
 html, body, [class*="css"] {
-    font-family: 'DM Sans', sans-serif;
-    color: #e8e4dc;
+    font-family: 'Inter', sans-serif;
 }
 
 .stApp {
-    background: #0a0a0f;
-    background-image:
-        radial-gradient(ellipse 80% 50% at 20% -10%, rgba(255,140,50,0.12) 0%, transparent 60%),
-        radial-gradient(ellipse 60% 40% at 80% 110%, rgba(255,80,30,0.08) 0%, transparent 55%);
+    background:
+        radial-gradient(circle at 15% 20%,
+        rgba(77,163,255,0.15),
+        transparent 30%),
+
+        radial-gradient(circle at 85% 80%,
+        rgba(124,92,255,0.15),
+        transparent 30%),
+
+        radial-gradient(circle at 50% 100%,
+        rgba(0,255,180,0.08),
+        transparent 40%),
+
+        #05070d;
+
+    color: #f8fafc;
 }
 
-/* ── Hide default streamlit chrome ── */
-#MainMenu, footer, header { visibility: hidden; }
-.block-container { padding: 2rem 3rem 4rem; max-width: 1200px; }
+#MainMenu,
+footer,
+header {
+    visibility: hidden;
+}
 
-/* ── Hero header ── */
+.block-container {
+    max-width: 1400px;
+    padding-top: 2rem;
+    padding-bottom: 3rem;
+}
+
+/* =========================
+   HERO
+========================= */
+
 .hero {
     text-align: center;
-    padding: 3.5rem 0 2.5rem;
-    position: relative;
-}
-.hero-eyebrow {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.7rem;
-    font-weight: 500;
-    letter-spacing: 0.25em;
-    text-transform: uppercase;
-    color: #ff8c32;
-    margin-bottom: 1rem;
-    opacity: 0.9;
-}
-.hero h1 {
-    font-family: 'Syne', sans-serif;
-    font-size: clamp(2.8rem, 6vw, 5rem);
-    font-weight: 800;
-    line-height: 1.0;
-    letter-spacing: -0.03em;
-    color: #f0ebe0;
-    margin: 0 0 1rem;
-}
-.hero h1 span {
-    color: #ff8c32;
-}
-.hero-sub {
-    font-size: 1.05rem;
-    font-weight: 300;
-    color: #a09890;
-    max-width: 520px;
-    margin: 0 auto;
-    line-height: 1.65;
+    padding: 4rem 0;
 }
 
-/* ── Divider ── */
+.hero-eyebrow {
+    color: #60a5fa;
+    font-size: 0.75rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+.hero h1 {
+    font-size: clamp(3rem, 7vw, 6rem);
+    font-weight: 800;
+    line-height: 1;
+    margin-bottom: 1rem;
+    color: white;
+}
+
+.hero h1 span {
+    background: linear-gradient(
+        135deg,
+        #4da3ff,
+        #7c5cff
+    );
+
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.hero-sub {
+    max-width: 650px;
+    margin: auto;
+    color: #94a3b8;
+    font-size: 1.1rem;
+    line-height: 1.8;
+}
+
+/* =========================
+   DIVIDER
+========================= */
+
 .divider {
     height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(255,140,50,0.3), transparent);
+
+    background:
+    linear-gradient(
+        90deg,
+        transparent,
+        rgba(77,163,255,.5),
+        transparent
+    );
+
     margin: 2rem 0;
 }
 
-/* ── Input card ── */
+/* =========================
+   GLASS PANELS
+========================= */
+
+.input-card,
+.step-card,
+.result-panel,
+.report-panel,
+.feedback-panel {
+
+    background: rgba(255,255,255,0.04);
+
+    backdrop-filter: blur(18px);
+
+    border: 1px solid rgba(255,255,255,0.08);
+
+    border-radius: 20px;
+
+    box-shadow:
+        0 10px 40px rgba(0,0,0,.25);
+
+    transition: all .3s ease;
+}
+
 .input-card {
-    background: rgba(255,255,255,0.03);
-    border: 1px solid rgba(255,140,50,0.15);
-    border-radius: 16px;
-    padding: 2rem 2.5rem;
-    margin-bottom: 2rem;
-    backdrop-filter: blur(8px);
+    padding: 2rem;
+    margin-bottom: 1.5rem;
 }
 
-/* ── Streamlit input overrides ── */
-.stTextInput > div > div > input {
+.report-panel,
+.feedback-panel {
+    padding: 2rem;
+}
+
+/* =========================
+   INPUT
+========================= */
+
+.stTextInput label {
+    color: #60a5fa !important;
+    font-weight: 600 !important;
+    letter-spacing: 1px !important;
+}
+
+.stTextInput input {
+
     background: rgba(255,255,255,0.05) !important;
-    border: 1px solid rgba(255,140,50,0.25) !important;
-    border-radius: 10px !important;
-    color: #f0ebe0 !important;
-    font-family: 'DM Sans', sans-serif !important;
-    font-size: 1rem !important;
-    padding: 0.75rem 1rem !important;
-    transition: border-color 0.2s, box-shadow 0.2s !important;
-}
-.stTextInput > div > div > input:focus {
-    border-color: #ff8c32 !important;
-    box-shadow: 0 0 0 3px rgba(255,140,50,0.12) !important;
-}
-.stTextInput > label {
-    font-family: 'DM Mono', monospace !important;
-    font-size: 0.72rem !important;
-    letter-spacing: 0.15em !important;
-    text-transform: uppercase !important;
-    color: #ff8c32 !important;
-    font-weight: 500 !important;
+
+    border: 1px solid rgba(255,255,255,.1) !important;
+
+    color: white !important;
+
+    border-radius: 12px !important;
+
+    padding: .85rem 1rem !important;
 }
 
-/* ── Button ── */
+.stTextInput input:focus {
+
+    border-color: #4da3ff !important;
+
+    box-shadow:
+        0 0 0 3px rgba(77,163,255,.15) !important;
+}
+
+/* =========================
+   BUTTON
+========================= */
+
 .stButton > button {
-    background: linear-gradient(135deg, #ff8c32 0%, #ff5a1a 100%) !important;
-    color: #0a0a0f !important;
-    font-family: 'Syne', sans-serif !important;
-    font-weight: 700 !important;
-    font-size: 0.95rem !important;
-    letter-spacing: 0.04em !important;
-    border: none !important;
-    border-radius: 10px !important;
-    padding: 0.7rem 2.2rem !important;
-    cursor: pointer !important;
-    transition: transform 0.15s, box-shadow 0.15s, opacity 0.15s !important;
-    box-shadow: 0 4px 20px rgba(255,140,50,0.3) !important;
+
     width: 100%;
-}
-.stButton > button:hover {
-    transform: translateY(-2px) !important;
-    box-shadow: 0 8px 28px rgba(255,140,50,0.4) !important;
-    opacity: 0.95 !important;
-}
-.stButton > button:active {
-    transform: translateY(0) !important;
+
+    border: none !important;
+
+    border-radius: 12px !important;
+
+    padding: .85rem 1.5rem !important;
+
+    background:
+    linear-gradient(
+        135deg,
+        #4da3ff,
+        #7c5cff
+    ) !important;
+
+    color: white !important;
+
+    font-weight: 700 !important;
+
+    transition: all .25s ease !important;
+
+    box-shadow:
+        0 10px 30px rgba(77,163,255,.35) !important;
 }
 
-/* ── Pipeline step cards ── */
+.stButton > button:hover {
+
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 15px 40px rgba(77,163,255,.5) !important;
+}
+
+/* =========================
+   PIPELINE
+========================= */
+
 .step-card {
-    background: rgba(255,255,255,0.03);
-    border: 1px solid rgba(255,255,255,0.07);
-    border-radius: 14px;
-    padding: 1.5rem 1.8rem;
-    margin-bottom: 1.2rem;
-    position: relative;
-    overflow: hidden;
-    transition: border-color 0.3s;
+    padding: 1.3rem;
+    margin-bottom: 1rem;
 }
+
 .step-card.active {
-    border-color: rgba(255,140,50,0.4);
-    background: rgba(255,140,50,0.04);
+
+    border-color:
+    rgba(77,163,255,.45);
+
+    background:
+    rgba(77,163,255,.08);
 }
+
 .step-card.done {
-    border-color: rgba(80,200,120,0.3);
-    background: rgba(80,200,120,0.03);
+
+    border-color:
+    rgba(34,197,94,.4);
+
+    background:
+    rgba(34,197,94,.08);
 }
-.step-card::before {
-    content: '';
-    position: absolute;
-    left: 0; top: 0; bottom: 0;
-    width: 3px;
-    border-radius: 14px 0 0 14px;
-    background: rgba(255,255,255,0.05);
-    transition: background 0.3s;
-}
-.step-card.active::before { background: #ff8c32; }
-.step-card.done::before   { background: #50c878; }
 
 .step-header {
     display: flex;
     align-items: center;
-    gap: 0.8rem;
-    margin-bottom: 0.3rem;
 }
+
 .step-num {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.68rem;
-    font-weight: 500;
-    letter-spacing: 0.15em;
-    color: #ff8c32;
-    opacity: 0.7;
+    color: #60a5fa;
+    font-size: .75rem;
+    margin-right: .75rem;
 }
+
 .step-title {
-    font-family: 'Syne', sans-serif;
-    font-size: 0.95rem;
+    color: white;
     font-weight: 700;
-    color: #f0ebe0;
-}
-.step-status {
-    margin-left: auto;
-    font-family: 'DM Mono', monospace;
-    font-size: 0.68rem;
-    letter-spacing: 0.1em;
-}
-.status-waiting  { color: #555; }
-.status-running  { color: #ff8c32; }
-.status-done     { color: #50c878; }
-
-/* ── Result panels ── */
-.result-panel {
-    background: rgba(255,255,255,0.025);
-    border: 1px solid rgba(255,255,255,0.07);
-    border-radius: 14px;
-    padding: 1.8rem 2rem;
-    margin-top: 1rem;
-    margin-bottom: 1.5rem;
-}
-.result-panel-title {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.7rem;
-    font-weight: 500;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: #ff8c32;
-    margin-bottom: 1rem;
-    padding-bottom: 0.7rem;
-    border-bottom: 1px solid rgba(255,140,50,0.15);
-}
-.result-content {
-    font-size: 0.92rem;
-    line-height: 1.8;
-    color: #cdc8bf;
-    white-space: pre-wrap;
-    font-family: 'DM Sans', sans-serif;
 }
 
-/* ── Report & feedback panels ── */
-.report-panel {
-    background: rgba(255,255,255,0.025);
-    border: 1px solid rgba(255,140,50,0.2);
-    border-radius: 16px;
-    padding: 2rem 2.5rem;
-    margin-top: 1rem;
-}
-.feedback-panel {
-    background: rgba(255,255,255,0.025);
-    border: 1px solid rgba(80,200,120,0.2);
-    border-radius: 16px;
-    padding: 2rem 2.5rem;
-    margin-top: 1rem;
-}
-.panel-label {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.7rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    margin-bottom: 1.2rem;
-    padding-bottom: 0.7rem;
-}
-.panel-label.orange {
-    color: #ff8c32;
-    border-bottom: 1px solid rgba(255,140,50,0.15);
-}
-.panel-label.green {
-    color: #50c878;
-    border-bottom: 1px solid rgba(80,200,120,0.15);
+.status-running {
+    color: #60a5fa;
 }
 
-/* ── Progress text ── */
-.stSpinner > div { color: #ff8c32 !important; }
-
-/* ── Expander ── */
-details summary {
-    font-family: 'DM Mono', monospace !important;
-    font-size: 0.75rem !important;
-    color: #a09890 !important;
-    letter-spacing: 0.1em !important;
-    cursor: pointer;
+.status-done {
+    color: #22c55e;
 }
 
-/* ── Section heading ── */
+.status-waiting {
+    color: #64748b;
+}
+
+/* =========================
+   SECTION TITLES
+========================= */
+
 .section-heading {
-    font-family: 'Syne', sans-serif;
-    font-size: 1.3rem;
+
+    color: white;
+
+    font-size: 1.5rem;
+
     font-weight: 700;
-    color: #f0ebe0;
-    margin: 2rem 0 1rem;
+
+    margin-bottom: 1rem;
 }
 
-/* ── Toast-style notice ── */
+/* =========================
+   PANELS
+========================= */
+
+.panel-label {
+
+    text-transform: uppercase;
+
+    letter-spacing: 2px;
+
+    font-size: .75rem;
+
+    margin-bottom: 1rem;
+
+    padding-bottom: .75rem;
+}
+
+.panel-label.orange {
+    color: #60a5fa;
+    border-bottom: 1px solid rgba(77,163,255,.2);
+}
+
+.panel-label.green {
+    color: #22c55e;
+    border-bottom: 1px solid rgba(34,197,94,.2);
+}
+
+/* =========================
+   RESULTS
+========================= */
+
+.result-content {
+    color: #cbd5e1;
+    line-height: 1.8;
+}
+
+/* =========================
+   EXPANDER
+========================= */
+
+details {
+
+    background:
+    rgba(255,255,255,.03);
+
+    border-radius: 12px;
+
+    padding: .75rem;
+}
+
+details summary {
+    color: #94a3b8;
+}
+
+/* =========================
+   NOTICE
+========================= */
+
 .notice {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.72rem;
-    color: #605850;
     text-align: center;
     margin-top: 3rem;
-    letter-spacing: 0.08em;
+    color: #64748b;
+    font-size: .8rem;
+}
+
+/* =========================
+   SCROLLBAR
+========================= */
+
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #0f172a;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #334155;
+    border-radius: 20px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #4da3ff;
 }
 </style>
 """, unsafe_allow_html=True)
@@ -321,7 +411,7 @@ for key in ("results", "running", "done"):
 st.markdown("""
 <div class="hero">
     <div class="hero-eyebrow">Multi-Agent AI System</div>
-    <h1>Research<span>Mind</span></h1>
+    <h1>The AI Research<span>Loop</span></h1>
     <p class="hero-sub">
         Four specialized AI agents collaborate — searching, scraping, writing,
         and critiquing — to deliver a polished research report on any topic.
